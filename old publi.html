@@ -1,5 +1,39 @@
-document.getElementById('meuBotao').addEventListener('click', function() {
-    const dropdown = document.getElementById('dropdown');
-    // Alterna a exibição do dropdown
-    dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
-});
+// Função para buscar a lista de strings do SharePoint
+async function fetchSharePointStrings() {
+    const url = "https://tvglobocorp.sharepoint.com/sites/homogdadosglo/Lists/conteudoGenerico/DispForm.aspx?ID=6&e=Sahusp"; // Substitua pela URL da sua lista
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json; odata=verbose',
+                // Adicione mais cabeçalhos conforme necessário
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados do SharePoint');
+        }
+
+        const data = await response.json();
+        const strings = data.d.results; // Ajuste conforme a estrutura dos dados
+        displayStrings(strings);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Função para exibir as strings na lista
+function displayStrings(strings) {
+    const listElement = document.getElementById('string-list');
+    listElement.innerHTML = ''; // Limpa a lista
+
+    strings.forEach(string => {
+        const listItem = document.createElement('li');
+        listItem.textContent = string.Title; // Ajuste conforme o campo da sua lista
+        listElement.appendChild(listItem);
+    });
+}
+
+// Chama a função ao carregar a página
+document.addEventListener('DOMContentLoaded', fetchSharePointStrings);
