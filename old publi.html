@@ -1,3 +1,5 @@
 document.getElementById('meuBotao').addEventListener('click', function() {
-    document.getElementById('mensagem').innerText = 'Você clicou no botão!';
+    const dropdown = document.getElementById('dropdown');
+    // Alterna a exibição do dropdown
+    dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
 });
